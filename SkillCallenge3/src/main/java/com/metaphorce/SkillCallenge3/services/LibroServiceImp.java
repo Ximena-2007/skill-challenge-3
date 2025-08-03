@@ -1,6 +1,7 @@
 package com.metaphorce.SkillCallenge3.services;
 
 import com.metaphorce.SkillCallenge3.entidades.Libro;
+import com.metaphorce.SkillCallenge3.exceptions.LibroNoEncontradoException;
 import com.metaphorce.SkillCallenge3.repositories.LibroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,12 @@ public class LibroServiceImp implements LibroService{
         return libroRepository.findAll();
     }
 
-    public Optional<Libro> obtenerPorId(Integer id){
-        return libroRepository.findById(id);
+    public Optional<Libro> obtenerPorId(Integer id) {
+        Optional<Libro> libro = libroRepository.findById(id);
+        if (libro.isEmpty()) {
+            throw new LibroNoEncontradoException(id);
+        }
+        return libro;
     }
 
     public Libro guardar (Libro libro){
